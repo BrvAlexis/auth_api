@@ -31,7 +31,8 @@ if users.any?
       10.times do
         article = user.articles.create!(
           title: Faker::Book.title,
-          content: Faker::Lorem.sentence(word_count: 100, supplemental: true, random_words_to_add: 20)
+          content: Faker::Lorem.sentence(word_count: 100, supplemental: true, random_words_to_add: 20),
+          private: Faker::Boolean.boolean 
         )
   
         # Ajoutez des commentaires aux articles
