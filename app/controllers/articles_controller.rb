@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :update]
   before_action :set_article, only: %i[ show update destroy ]
 
   # GET /articles
@@ -15,7 +16,7 @@ class ArticlesController < ApplicationController
 
   # POST /articles
   def create
-    @article = Article.new(article_params)
+    @article = current_user.articles.build(article_params)
 
     if @article.save
       render json: @article, status: :created, location: @article
@@ -47,5 +48,10 @@ class ArticlesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def article_params
       params.require(:article).permit(:title, :content)
+    end
+
+    # Verify if a user is authenticated
+    def authenticate_user!
+      render json: { error: 'Vous devez être connecté pour effectuer cette action.' }, status: :unauthorized unless user_signed_in?
     end
 end
