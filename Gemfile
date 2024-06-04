@@ -3,6 +3,7 @@ source "https://rubygems.org"
 ruby "3.2.2"
 gem 'devise'
 gem 'devise-jwt'
+gem 'faker'
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
