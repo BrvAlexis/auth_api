@@ -13,6 +13,14 @@ require 'faker'
 # Supprimez tous les articles existants pour éviter les doublons
 Article.delete_all
 
+5.times do
+    User.create!(
+      
+      email: Faker::Internet.email,
+      password: Faker::Internet.password(min_length: 8)
+    )
+  end
+
 # Utilisez les utilisateurs existants pour créer des articles
 users = User.all
 
