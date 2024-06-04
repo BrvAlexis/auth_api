@@ -13,11 +13,29 @@ require 'faker'
 # Supprimez tous les articles existants pour éviter les doublons
 Article.delete_all
 
-# Créez 30 articles avec des données générées par Faker
-30.times do
-  Article.create!(
-    title: Faker::Book.title,
-    content: Faker::Lorem.sentence(word_count: 100, supplemental: true, random_words_to_add: 20)
-  )
-end
+# Utilisez les utilisateurs existants pour créer des articles
+users = User.all
+
+# Assurez-vous qu'il y a des utilisateurs disponibles
+if users.any?
+    users.each do |user|
+      # Créez 10 articles pour chaque utilisateur
+      10.times do
+        article = user.articles.create!(
+          title: Faker::Book.title,
+          content: Faker::Lorem.sentence(word_count: 100, supplemental: true, random_words_to_add: 20)
+        )
+  
+        # Ajoutez des commentaires aux articles
+        3.times do
+          article.comments.create!(
+            commenter: Faker::Name.name,
+            body: Faker::Lorem.sentence(word_count: 20)
+          )
+        end
+      end
+    end
+  else
+    puts 'Aucun utilisateur trouvé. Veuillez créer des utilisateurs avant de lancer ce seed.'
+  end
 

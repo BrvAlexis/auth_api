@@ -1,5 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update]
+  before_action :check_owner, only: %i[ update destroy ]
   before_action :set_article, only: %i[ show update destroy ]
 
   # GET /articles
@@ -43,6 +44,13 @@ class ArticlesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_article
       @article = Article.find(params[:id])
+    end
+
+    # Vérifie si l'utilisateur actuel est le propriétaire de l'article
+    def check_owner
+      unless current_user == @article.user
+        render json: { error: 'Vous n\'êtes pas autorisé à modifier ou supprimer cet article.' }, status: :forbidden
+      end
     end
 
     # Only allow a list of trusted parameters through.
